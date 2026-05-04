@@ -1,0 +1,35 @@
+name: Sentinel Change Passport
+description: Advisory Sentinel Change Passport for pull requests touching protected pilot surfaces.
+inputs:
+  adp_base_url:
+    description: Base URL of the ADP pilot registry API.
+    required: true
+  adp_token:
+    description: Bearer token for the ADP preview route.
+    required: true
+  launch_record_id:
+    description: ADP pilot launch record identifier.
+    required: true
+  agent_host:
+    description: Agent or host that produced the PR.
+    required: false
+    default: unknown
+  requested_task:
+    description: Optional task description used for advisory scope drift detection.
+    required: false
+  fail_on:
+    description: "When the advisory action should fail: never, blocked, missing_evidence, protected_surface."
+    required: false
+    default: never
+outputs:
+  decision:
+    description: Change Passport decision.
+  severity:
+    description: Change Passport severity.
+  protected_surfaces_count:
+    description: Number of protected surfaces touched.
+  passport_path:
+    description: Local path to generated passport JSON.
+runs:
+  using: node20
+  main: src/index.js

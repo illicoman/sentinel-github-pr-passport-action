@@ -1,0 +1,31 @@
+name: Sentinel Change Passport
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+  actions: read
+
+jobs:
+  sentinel-passport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: sentinel
+        uses: ./tools/github-pr-passport-action
+        with:
+          adp_base_url: ${{ vars.SENTINEL_ADP_BASE_URL }}
+          adp_token: ${{ secrets.SENTINEL_ADP_TOKEN }}
+          launch_record_id: ${{ vars.SENTINEL_LAUNCH_RECORD_ID }}
+          agent_host: codex
+          requested_task: ${{ github.event.pull_request.title }}
+          fail_on: never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sentinel-change-passport
+          path: ${{ steps.sentinel.outputs.passport_path }}
