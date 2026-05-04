@@ -31,5 +31,5 @@ outputs:
   passport_path:
     description: Local path to generated passport JSON.
 runs:
-  using: node20
+  using: node24
   main: src/index.js

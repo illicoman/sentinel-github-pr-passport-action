@@ -58,10 +58,12 @@ jobs:
   sentinel-passport:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - id: sentinel
-        uses: ./tools/github-pr-passport-action
+        uses: illicoman/sentinel-github-pr-passport-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.SENTINEL_GITHUB_COMMENT_TOKEN || github.token }}
         with:
           adp_base_url: ${{ vars.SENTINEL_ADP_BASE_URL }}
           adp_token: ${{ secrets.SENTINEL_ADP_TOKEN }}
@@ -70,11 +72,13 @@ jobs:
           requested_task: ${{ github.event.pull_request.title }}
           fail_on: never
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: sentinel-change-passport
           path: ${{ steps.sentinel.outputs.passport_path }}
 ```
+
+The action metadata uses the GitHub Actions `node24` runtime. Workflows should also use Node 24-compatible official actions such as `actions/checkout@v6` and `actions/upload-artifact@v7`.
 
 ## PR Comment
 
